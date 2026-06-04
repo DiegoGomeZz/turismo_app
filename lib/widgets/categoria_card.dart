@@ -13,24 +13,38 @@ class CategoriaCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 20.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        image: DecorationImage(
-          image: AssetImage(categoriaModel.imagen), 
-          fit: BoxFit.cover,
-          colorFilter: const ColorFilter.mode(
-            Color.fromARGB(80, 0, 0, 0),
-            BlendMode.darken
-          ),
-        ),
+        color: Colors.grey[300], // Fondo de carga
       ),
-      child: Center(
-        child: Text(
-          categoriaModel.nombre,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1.2,
-          ),
+      child: ClipRRect( // Para redondear las esquinas de la imagen
+        borderRadius: BorderRadius.circular(15),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              categoriaModel.imagen,
+              fit: BoxFit.cover,
+              // --- OPTIMIZACIÓN imagen (hecho con gemini )
+              // Le dice al motor de Flutter que ignore la resolución real del JPG
+              // y lo decodifique en RAM con un alto máximo de 400px (200px lógicos * 2 de densidad).
+              // Esto elimina el lag de scroll instantáneamente.
+              cacheHeight: 400, 
+
+              color: const Color.fromARGB(80, 0, 0, 0),
+              colorBlendMode: BlendMode.darken,
+            ),
+            
+            Center(
+              child: Text(
+                categoriaModel.nombre,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

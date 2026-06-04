@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
+
 import 'package:turismo_app/models/atraction_event_model.dart';
 import 'package:turismo_app/models/categoria_model.dart';
 import 'package:turismo_app/widgets/categoria_card.dart';
@@ -9,10 +11,10 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   static const List<Categoria> misCategorias = [
-    Categoria(nombre: 'Gastronomía', imagen: 'assets/images/gastronomia.jpg'),
-    Categoria(nombre: 'Cerros', imagen: 'assets/images/cerros.jpg'),
-    Categoria(nombre: 'Museos', imagen: 'assets/images/museos.jpg'),
-    Categoria(nombre: 'Escalada', imagen: 'assets/images/escalada.jpg'),
+    Categoria(nombre: 'Gastronomía', imagen: 'assets/images/gastronomia.webp'),
+    Categoria(nombre: 'Cerros', imagen: 'assets/images/cerros.webp'),
+    Categoria(nombre: 'Museos', imagen: 'assets/images/museos.webp'),
+    Categoria(nombre: 'Escalada', imagen: 'assets/images/escalada.webp'),
   ];
 
   @override
@@ -85,15 +87,25 @@ class HomeScreen extends StatelessWidget {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: 10,
+              //150 de ancho + 15 de margen derecho = 165 exactos.
+              itemExtent: 165.0,  //cambiar si en el futuro se cambia el ancho del contenedor o los espacios, para mantener la optimización de render
               itemBuilder: (context, index) {
-                return Container(
-                  width: 150,
-                  margin: const EdgeInsets.only(right: 15.0), 
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(15),
+                //Aislamiento de capas en los elementos que se scrollean
+                return RepaintBoundary(
+                  //Efecto Shimmer aplicado a los esqueletos de carga
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Container(
+                      width: 150, // Se mantiene el ancho interno visual
+                      margin: const EdgeInsets.only(right: 15.0), 
+                      decoration: BoxDecoration(
+                        color: Colors.white, // Debe ser blanco/sólido para que el shimmer brille sobre él
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Center(child: Text('Destino $index')),
+                    ),
                   ),
-                  child: Center(child: Text('Destino $index')),
                 );
               },
             ),
@@ -110,20 +122,26 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          ...misCategorias.map((cat) => CategoriaCard(categoriaModel: cat)).toList(),
+          //RepaintBoundary envolviendo cada tarjeta de categoría generada por el map
+          ...misCategorias.map((cat) => RepaintBoundary(
+            child: CategoriaCard(categoriaModel: cat)
+          )).toList(),
 
           const SizedBox(height: 12),
-          AtractionEventCard(atractionEventModel: AtractionEventModel(
-            titulo: 'Mueseo de arqueología de alta montaña de salta xd',
-            descripcion: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies lacinia, nunc nisl aliquam nisl, eget aliquam nunc nisl eget nunc.',
-            estrellas: 5,
-            cantidadVotos: 100,
-            fechaEvento: DateTime.now(),
-            imageUrl: 'assets/images/imagen_prueba.jpg',
-          )),
+
+          RepaintBoundary(
+            child: AtractionEventCard(atractionEventModel: AtractionEventModel(
+              titulo: 'Mueseo de arqueología de alta montaña de salta xd',
+              descripcion: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies lacinia, nunc nisl aliquam nisl, eget aliquam nunc nisl eget nunc.',
+              estrellas: 5,
+              cantidadVotos: 100,
+              fechaEvento: DateTime.now(),
+              imageUrl: 'https://media-cdn.tripadvisor.com/media/photo-s/1b/4a/c2/c0/maam-museo-de-arqueologia.jpg',
+            )),
+          ),
+
         ],
       )
     );
   }
-  
 }
