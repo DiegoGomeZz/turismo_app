@@ -3,5 +3,5 @@ class Categoria {
   final String nombre;
   final String imagen;
 
-  Categoria({required this.nombre, required this.imagen});
+  const Categoria({required this.nombre, required this.imagen});
 }

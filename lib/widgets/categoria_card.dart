@@ -16,8 +16,8 @@ class CategoriaCard extends StatelessWidget {
         image: DecorationImage(
           image: AssetImage(categoriaModel.imagen), 
           fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            const Color.fromARGB(80, 0, 0, 0),
+          colorFilter: const ColorFilter.mode(
+            Color.fromARGB(80, 0, 0, 0),
             BlendMode.darken
           ),
         ),

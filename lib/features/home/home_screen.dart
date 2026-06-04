@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:turismo_app/models/atraction_event_model.dart';
 import 'package:turismo_app/models/categoria_model.dart';
 import 'package:turismo_app/widgets/categoria_card.dart';
+import 'package:turismo_app/widgets/atraction_event_card.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  static const List<Categoria> misCategorias = [
+    Categoria(nombre: 'Gastronomía', imagen: 'assets/images/gastronomia.jpg'),
+    Categoria(nombre: 'Cerros', imagen: 'assets/images/cerros.jpg'),
+    Categoria(nombre: 'Museos', imagen: 'assets/images/museos.jpg'),
+    Categoria(nombre: 'Escalada', imagen: 'assets/images/escalada.jpg'),
+  ];
+
   @override
   Widget build(BuildContext context) {
-
-    final List<Categoria> misCategorias = [
-      Categoria(nombre: 'Gastronomía', imagen: 'assets/images/gastronomia.jpg'),
-      Categoria(nombre: 'Cerros', imagen: 'assets/images/cerros.jpg'),
-      Categoria(nombre: 'Museos', imagen: 'assets/images/museos.jpg'),
-      Categoria(nombre: 'Escalada', imagen: 'assets/images/escalada.jpg'),
-    ];
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -108,27 +111,19 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 12),
 
           ...misCategorias.map((cat) => CategoriaCard(categoriaModel: cat)).toList(),
+
+          const SizedBox(height: 12),
+          AtractionEventCard(atractionEventModel: AtractionEventModel(
+            titulo: 'Mueseo de arqueología de alta montaña de salta xd',
+            descripcion: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies lacinia, nunc nisl aliquam nisl, eget aliquam nunc nisl eget nunc.',
+            estrellas: 5,
+            cantidadVotos: 100,
+            fechaEvento: DateTime.now(),
+            imageUrl: 'assets/images/imagen_prueba.jpg',
+          )),
         ],
       )
     );
   }
-
-  /*Widget _buildCategoriaCard(String texto, Color color) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
-      child: Container(
-        height: 200,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Center(
-          child: Text(
-            texto,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
-    );
-  }*/
+  
 }
