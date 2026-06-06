@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:turismo_app/models/categoria_model.dart';
+import 'package:turismo_app/features/home/models/category_model.dart';
 
 class CategoriaCard extends StatelessWidget {
   final Categoria categoriaModel;

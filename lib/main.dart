@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:turismo_app/main_screen.dart';
+import 'package:turismo_app/core/widgets/main_screen.dart';
 
 void main() {
   runApp(const MyApp());

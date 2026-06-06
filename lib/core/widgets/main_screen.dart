@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:turismo_app/features/home/home_screen.dart';
-import 'package:turismo_app/features/map/map_screen.dart';
-import 'package:turismo_app/features/profile/profile_screen.dart';
-import 'package:turismo_app/features/provisorio/provisorio_screen.dart';
-import 'package:turismo_app/features/search/search_screen.dart';
+import 'package:turismo_app/features/home/views/home_screen.dart';
+import 'package:turismo_app/features/map/views/map_screen.dart';
+import 'package:turismo_app/features/profile/views/profile_screen.dart';
+import 'package:turismo_app/features/provisorio/views/provisorio_screen.dart';
+import 'package:turismo_app/features/search/views/search_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

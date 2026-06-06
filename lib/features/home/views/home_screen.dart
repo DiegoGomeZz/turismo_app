@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import 'package:turismo_app/models/atraction_event_model.dart';
-import 'package:turismo_app/models/categoria_model.dart';
-import 'package:turismo_app/widgets/categoria_card.dart';
-import 'package:turismo_app/widgets/atraction_event_card.dart';
+import 'package:turismo_app/features/home/models/category_model.dart';
+import 'package:turismo_app/features/home/views/widgets/category_card.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -127,10 +125,10 @@ class HomeScreen extends StatelessWidget {
             child: CategoriaCard(categoriaModel: cat)
           )).toList(),
 
-          const SizedBox(height: 12),
+          /*const SizedBox(height: 12),
 
-          RepaintBoundary(
-            child: AtractionEventCard(atractionEventModel: AtractionEventModel(
+          RepaintBoundary(   //hardcodeado por ahora solo pa ver 
+            child: AttractionCard(attractionModel: AttractionModel(
               titulo: 'Mueseo de arqueología de alta montaña de salta xd',
               descripcion: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies lacinia, nunc nisl aliquam nisl, eget aliquam nunc nisl eget nunc.',
               estrellas: 5,
@@ -138,7 +136,7 @@ class HomeScreen extends StatelessWidget {
               fechaEvento: DateTime.now(),
               imageUrl: 'https://media-cdn.tripadvisor.com/media/photo-s/1b/4a/c2/c0/maam-museo-de-arqueologia.jpg',
             )),
-          ),
+          ),*/
 
         ],
       )

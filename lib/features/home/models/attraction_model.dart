@@ -1,4 +1,4 @@
-class AtractionEventModel {
+class AttractionModel {
   String titulo;
   String descripcion;
   String imageUrl;
@@ -6,7 +6,7 @@ class AtractionEventModel {
   int cantidadVotos;
   DateTime fechaEvento;
 
-  AtractionEventModel({
+  AttractionModel({
     required this.titulo,
     required this.descripcion,
     required this.imageUrl,
