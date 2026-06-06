@@ -15,21 +15,42 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int currentIndex = 0;
 
-  final List<Widget> screens = [
-    const HomeScreen(),   // Índice 0
-    const SearchScreen(), // Índice 1
-    const MapScreen(),    // Índice 2
-    const ProvisorioScreen(), // Índice 3
-    const ProfileScreen(),// Índice 4
+  // Creamos una llave independiente para el navegador de cada pestaña para mantener su estado independientemente de las demás (por ejemplo, si estás en la pestaña de Home, haces scroll y luego cambias a Search, al volver a Home debería mantener el scroll donde lo dejaste).
+  final List<GlobalKey<NavigatorState>> navigatorKeys = [
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
   ];
-  
+
+  // Creamos un Navigator para cada uno de los tabs. Esto permite que cada tab tenga su propia pila de navegación.
+  Widget _buildTabNavigator(int index, Widget screen) {
+    return Navigator(
+      key: navigatorKeys[index],
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(builder: (context) => screen);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[currentIndex],
+
+      // Usamos IndexedStack para mantener el estado de cada pantalla incluso cuando no está visible.
+      body: IndexedStack(
+        index: currentIndex,
+        children: [
+          _buildTabNavigator(0, const HomeScreen()),
+          _buildTabNavigator(1, const SearchScreen()),
+          _buildTabNavigator(2, const MapScreen()),
+          _buildTabNavigator(3, const ProvisorioScreen()),
+          _buildTabNavigator(4, const ProfileScreen()),
+        ],
+      ),
 
       bottomNavigationBar: NavigationBar(
-        
         height: 65, 
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         elevation: 0,
