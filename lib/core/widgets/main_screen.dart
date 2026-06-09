@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:turismo_app/features/home/controllers/home_controller.dart';
+
 import 'package:turismo_app/features/home/views/home_screen.dart';
 import 'package:turismo_app/features/map/views/map_screen.dart';
 import 'package:turismo_app/features/profile/views/profile_screen.dart';
@@ -42,7 +45,13 @@ class _MainScreenState extends State<MainScreen> {
       body: IndexedStack(
         index: currentIndex,
         children: [
-          _buildTabNavigator(0, const HomeScreen()),
+          _buildTabNavigator(
+            0, 
+            ChangeNotifierProvider(
+              create: (context) => HomeController(), // Creamos el Controlador
+              child: const HomeScreen(),             // Se lo pasamos a la Vista
+            ),
+          ),
           _buildTabNavigator(1, const SearchScreen()),
           _buildTabNavigator(2, const MapScreen()),
           _buildTabNavigator(3, const ProvisorioScreen()),

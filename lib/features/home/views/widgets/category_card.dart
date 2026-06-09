@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:turismo_app/features/home/models/category_model.dart';
 
-class CategoriaCard extends StatelessWidget {
-  final Categoria categoriaModel;
+class CategoryCard extends StatelessWidget {
+  final CategoryModel categoriaModel;
 
-  const CategoriaCard({super.key, required this.categoriaModel});
+  const CategoryCard({super.key, required this.categoriaModel});
 
   @override
   Widget build(BuildContext context) {

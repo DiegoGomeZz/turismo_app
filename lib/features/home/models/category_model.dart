@@ -1,7 +1,6 @@
-// Puedes poner esto en un archivo llamado models/categoria_model.dart
-class Categoria {
+class CategoryModel {
   final String nombre;
   final String imagen;
 
-  const Categoria({required this.nombre, required this.imagen});
+  const CategoryModel({required this.nombre, required this.imagen});
 }
