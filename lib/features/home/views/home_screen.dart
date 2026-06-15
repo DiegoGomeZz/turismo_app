@@ -116,17 +116,43 @@ class HomeScreen extends StatelessWidget {
 
           
           RepaintBoundary(
-            child: AttractionCard(attractionModel: AttractionModel(
-              titulo: 'museo de arqueología de alta montaña',
-              descripcion: 'hola hola xdddddddddddddddddd',
-              imageUrl: 'https://media-cdn.tripadvisor.com/media/photo-s/1b/4a/c2/c0/maam-museo-de-arqueologia.jpg',
-              estrellas: 5,
-              cantidadVotos: 100,
-              fechaEvento: DateTime.now(),)),
+            child: AttractionCard(
+              attractionModel: AttractionModel(
+                id: '1',
+                titulo: 'museo de arqueología de alta montaña',
+                descripcion: 'hola hola este es el museo de arqueología de alta montaña, un lugar fascinante que alberga las momias mejor conservadas del mundo. Ubicado en la ciudad de Salta, Argentina, este museo ofrece a los visitantes una experiencia única para conocer la historia y cultura de las civilizaciones precolombinas que habitaron la región andina.',
+                promedioEstrellas: 3,
+                cantidadVotos: 1200,
+                direccion: 'Calle Falsa 123',
+                imageUrls: [
+                  'https://media-cdn.tripadvisor.com/media/photo-s/1b/4a/c2/c0/maam-museo-de-arqueologia.jpg',
+                  'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/04/c7/ce/65/museo-pajcha-arte-etnico.jpg?w=600&h=600&s=1',
+                  'https://thebigtraveltheory.fr/wp-content/uploads/2018/09/MAAM-1.jpg',
+                ],
+                estadisticasVotos: RatingStats(estrellas5: 1000, estrellas4: 150, estrellas3: 30, estrellas2: 15, estrellas1: 5),
+                comentarios: [
+                  ReviewModel(
+                    id: '1',
+                    nombreUsuario: 'Yamil Homero',
+                    avatarUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
+                    puntuacion: 5.0,    
+                    comentario: '¡Increíble experiencia! Las momias están muy bien conservadas y el museo es muy educativo.',
+                    fecha: DateTime.now().subtract(const Duration(days: 2)),
+                  ),
+                  ReviewModel(
+                    id: '2',
+                    nombreUsuario: 'Cami Cisnero',
+                    avatarUrl: 'https://randomuser.me/api/portraits/women/2.jpg',
+                    puntuacion: 4.5,
+                    comentario: 'Muy interesante, aunque me hubiera gustado que hubiera más información en inglés.',
+                    fecha: DateTime.now().subtract(const Duration(days: 1)),
+                  ),
+                ],
+              )
+            ),
           ),
-          
         ],
-      )
+      ),
     );
   }
 }

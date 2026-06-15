@@ -11,8 +11,8 @@ class AttractionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int starCount = attractionModel.estrellas ?? 0;
-    final String imagePath = attractionModel.imageUrl ?? '';
+    final int starCount = attractionModel.promedioEstrellas.round();
+    final String imagePath = attractionModel.coverImage;
 
     return GestureDetector(
       onTap: () {
@@ -115,7 +115,7 @@ class AttractionCard extends StatelessWidget {
                         children: [
                             ...List.generate(
                               starCount,
-                              (index) => const Icon(Icons.star, color: Colors.yellow, size: 16),
+                              (index) => const Icon(Icons.star, color: Color.fromARGB(255, 255, 235, 59), size: 16),
                             ),
                             Text(
                               ' (${attractionModel.cantidadVotos} votos)',
