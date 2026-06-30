@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:turismo_app/features/profile/controllers/auth_provider.dart';
+import 'package:turismo_app/features/profile/providers/auth_provider.dart';
 import 'package:turismo_app/features/profile/views/edit_profile_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -31,23 +31,8 @@ class ProfileScreen extends StatelessWidget {
           PopupMenuButton<String>(
             icon: const Icon(Icons.settings_outlined, color: Colors.black),
             color: Colors.white,
-
             onSelected: (value) {
-              switch (value) {
-                case 'edit':
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const EditProfileScreen(),
-                    ),
-                  );
-                  break;
-
-                case 'logout':
-                  authProvider.logout();
-                  Navigator.popUntil(context, (route) => route.isFirst);
-                  break;
-              }
+              _handleMenuAction(context, value);
             },
             itemBuilder: (context) => [
               const PopupMenuItem(
@@ -171,5 +156,23 @@ class ProfileScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _handleMenuAction(BuildContext context, String value) async {
+    final authProvider = context.read<AuthProvider>();
+    switch (value) {
+      case 'edit':
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+        );
+        break;
+
+      case 'logout':
+        await authProvider.logout();
+        if (!context.mounted) return;
+        Navigator.popUntil(context, (route) => route.isFirst);
+        break;
+    }
   }
 }

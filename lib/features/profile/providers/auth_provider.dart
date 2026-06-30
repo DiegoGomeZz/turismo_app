@@ -3,6 +3,8 @@ import '../enums/auth_state.dart';
 import '../models/user_model.dart';
 import '../services/api_client.dart';
 import '../services/auth_service.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
   late final AuthService _authService;
@@ -30,8 +32,18 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> checkLoginStatus() async {
-    await Future.delayed(const Duration(seconds: 1));
-    _authState = AuthState.unauthenticated;
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final userJson = prefs.getString('user');
+
+    if (token != null && userJson != null) {
+      _token = token;
+      _user = UserModel.fromJson(jsonDecode(userJson));
+      _authState = AuthState.authenticated;
+    } else {
+      _authState = AuthState.unauthenticated;
+    }
+
     notifyListeners();
   }
 
@@ -42,6 +54,11 @@ class AuthProvider extends ChangeNotifier {
       final response = await _authService.login(email, password);
       _user = response.user;
       _token = response.token;
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', _token!);
+      await prefs.setString('user', jsonEncode(_user!.toJson()));
+
       _authState = AuthState.authenticated;
       return true;
     } catch (e) {
@@ -75,6 +92,11 @@ class AuthProvider extends ChangeNotifier {
 
       _user = response.user;
       _token = response.token;
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', _token!);
+      await prefs.setString('user', jsonEncode(_user!.toJson()));
+
       _authState = AuthState.authenticated;
       return true;
     } catch (e) {
@@ -106,6 +128,10 @@ class AuthProvider extends ChangeNotifier {
       );
 
       _user = updatedUser;
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user', jsonEncode(_user!.toJson()));
+
       _authState = AuthState.authenticated;
     } catch (e) {
       _authState = AuthState.authenticated;
@@ -115,9 +141,13 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  void logout() {
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
     _user = null;
     _token = null;
+
     _authState = AuthState.unauthenticated;
     notifyListeners();
   }

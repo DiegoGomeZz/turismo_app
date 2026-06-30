@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:turismo_app/features/profile/enums/auth_state.dart';
 import 'package:turismo_app/features/profile/views/login_requiered_screen.dart';
 import 'profile_screen.dart';
-import '../controllers/auth_provider.dart';
+import '../providers/auth_provider.dart';
 
 class ProfileGate extends StatelessWidget {
   const ProfileGate({super.key});
