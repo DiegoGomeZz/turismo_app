@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:turismo_app/core/widgets/main_screen.dart';
-import 'package:turismo_app/features/home/controllers/attraction_detail_controller.dart';
-import 'package:turismo_app/features/map/view_models/map_view_model.dart'; // 2. Importa tu ViewModel
 import 'package:turismo_app/features/profile/controllers/auth_provider.dart';
 import 'package:turismo_app/features/home/providers/attraction_detail_provider.dart';
 import 'package:turismo_app/features/map/providers/map_provider.dart';
