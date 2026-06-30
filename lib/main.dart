@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:turismo_app/core/widgets/main_screen.dart';
-import 'package:turismo_app/features/profile/controllers/auth_provider.dart';
+import 'package:turismo_app/features/profile/providers/auth_provider.dart';
 import 'package:turismo_app/features/home/providers/attraction_detail_provider.dart';
 import 'package:turismo_app/features/map/providers/map_provider.dart';
 

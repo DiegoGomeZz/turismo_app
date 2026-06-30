@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:turismo_app/features/profile/controllers/auth_provider.dart';
+import 'package:turismo_app/features/profile/providers/auth_provider.dart';
 import 'package:turismo_app/features/profile/enums/auth_state.dart';
 
 class EditProfileScreen extends StatefulWidget {
