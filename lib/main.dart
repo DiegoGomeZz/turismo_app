@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // 1. Importa Provider
+import 'package:provider/provider.dart';
 import 'package:turismo_app/core/widgets/main_screen.dart';
-import 'package:turismo_app/features/home/controllers/attraction_detail_controller.dart';
-import 'package:turismo_app/features/map/view_models/map_view_model.dart'; // 2. Importa ViewModel
+import 'package:turismo_app/features/home/providers/attraction_detail_provider.dart';
+import 'package:turismo_app/features/map/providers/map_provider.dart';
 
 void main() {
   runApp(
-    // Envolvemos la app en un MultiProvider para escalabilidad
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => MapViewModel()),
-        ChangeNotifierProvider(create: (_) => AttractionDetailController()),
-        // Aquí ir agregando los ViewModels de las otras features (home, profile, etc.)
+        ChangeNotifierProvider(create: (_) => MapProvider()),
+        ChangeNotifierProvider(create: (_) => AttractionDetailProvider()),
       ],
       child: const MyApp(),
     ),

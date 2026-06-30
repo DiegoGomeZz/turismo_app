@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:turismo_app/features/home/models/attraction_model.dart';
 import 'package:turismo_app/features/home/views/widgets/create_event_button.dart';
-
-import '../controllers/home_controller.dart';
+import '../providers/home_provider.dart';
 import 'widgets/category_card.dart';
 import 'package:turismo_app/features/home/views/widgets/vertical_attraction_card.dart';
 
@@ -13,8 +10,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Nos suscribimos al controlador
-    final homeController = context.watch<HomeController>();
+    final homeProvider = context.watch<HomeProvider>();
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -75,7 +71,7 @@ class HomeScreen extends StatelessWidget {
             height: 260,
             child: Builder(
               builder: (context) {
-                final destinos = homeController.destinosPopulares; 
+                final destinos = homeProvider.destinosPopulares; 
                 
                 if (destinos.isEmpty) {
                   return const Center(child: CircularProgressIndicator()); 
@@ -106,7 +102,7 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          ...homeController.categorias.map((cat) => RepaintBoundary(
+          ...homeProvider.categorias.map((cat) => RepaintBoundary(
             child: CategoryCard(categoriaModel: cat)
           )).toList(),
           

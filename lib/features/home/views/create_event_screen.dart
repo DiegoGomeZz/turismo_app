@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:turismo_app/features/home/models/attraction_model.dart';
+import 'package:turismo_app/features/home/models/event_model.dart';
 
 class CreateEventScreen extends StatefulWidget {
   const CreateEventScreen({super.key});
@@ -47,32 +47,28 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   }
 
   void _guardarFormulario() {
-    if (_formKey.currentState!.validate()) {
-      // Creamos el objeto AttractionModel asignando valores por defecto a los campos analíticos
-      final nuevaAtraccion = AttractionModel(
-        id: DateTime.now().millisecondsSinceEpoch.toString(), // Generación de ID único local básico
+    // Validamos que se haya seleccionado una fecha, ya que para un evento es obligatoria
+    if (_formKey.currentState!.validate() && _fechaEvento != null) {
+      
+      final nuevoEvento = EventModel(
+        id: DateTime.now().millisecondsSinceEpoch.toString(), 
         titulo: _tituloController.text.trim(),
         descripcion: _descripcionController.text.trim(),
-        imageUrls: _imageUrlController.text.isNotEmpty ? [_imageUrlController.text.trim()] : [],
-        promedioEstrellas: 0.0, // Inicia sin calificación
-        cantidadVotos: 0,       // Inicia sin votos
-        fechaEvento: _fechaEvento, // Puede ser null si no es un evento cronológico
-        direccion: _direccionController.text.trim(),
+        fechaEvento: _fechaEvento!, // Usamos ! porque ya validamos que no es null
+        direccion: _direccionController.text.trim(), // A futuro, esto será un desplegable de Destinos
         precio: double.tryParse(_precioController.text) ?? 0.0,
-        estadisticasVotos: RatingStats(
-          estrellas5: 0,
-          estrellas4: 0,
-          estrellas3: 0,
-          estrellas2: 0,
-          estrellas1: 0,
-        ),
-        comentarios: [], // Lista inicial vacía
+        imageUrl: _imageUrlController.text.trim(),
       );
 
-      // TODO: Aquí debes conectar con tu HomeController para guardar la instancia
-      // Ejemplo: context.read<HomeController>().agregarDestino(nuevaAtraccion);
+      // TODO: Mandar el 'nuevoEvento' a tu EventController
+      // context.read<EventController>().crearEvento(nuevoEvento);
 
-      Navigator.pop(context); // Regresa a la HomeScreen
+      Navigator.pop(context); 
+    } else if (_fechaEvento == null) {
+      // Mostramos un mensajito si se olvidó la fecha
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor, selecciona una fecha para el evento.')),
+      );
     }
   }
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class AttractionDetailController extends ChangeNotifier {
+class AttractionDetailProvider extends ChangeNotifier {
   final PageController pageController = PageController();
-  
+
   int _currentImageIndex = 0;
   bool _isDescriptionExpanded = false;
   bool _areReviewsExpanded = false;

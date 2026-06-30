@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:turismo_app/features/home/controllers/home_controller.dart';
+import 'package:turismo_app/features/home/providers/home_provider.dart';
 
 import 'package:turismo_app/features/home/views/home_screen.dart';
 import 'package:turismo_app/features/map/views/map_screen.dart';
@@ -48,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
           _buildTabNavigator(
             0, 
             ChangeNotifierProvider(
-              create: (context) => HomeController(), // Creamos el Controlador
+              create: (context) => HomeProvider(),
               child: const HomeScreen(),             // Se lo pasamos a la Vista
             ),
           ),
