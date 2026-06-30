@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:turismo_app/features/profile/controllers/auth_provider.dart';
 
-class ProfileScreen extends StatelessWidget {   
+class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
+
+    final user = authProvider.user;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'nombre_usuario',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        title: Text(
+          '${user?.name ?? ''} ${user?.lastname ?? ''}',
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -19,7 +28,9 @@ class ProfileScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_outlined, color: Colors.black),
-            onPressed: () {}, //agregar funcionamiento!!!!!!!!
+            onPressed: () {
+              // navegar a editar perfil
+            },
           ),
         ],
       ),
@@ -44,10 +55,19 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const CircleAvatar(
+                    CircleAvatar(
                       radius: 40,
-                      backgroundColor: Color.fromARGB(255, 220, 220, 220),
-                      child: Icon(Icons.person, size: 40, color: Colors.white),
+                      backgroundColor: const Color.fromARGB(255, 220, 220, 220),
+                      backgroundImage: user?.image != null
+                          ? NetworkImage(user!.image!)
+                          : null,
+                      child: user?.image == null
+                          ? const Icon(
+                              Icons.person,
+                              size: 40,
+                              color: Colors.white,
+                            )
+                          : null,
                     ),
                     Expanded(
                       child: Row(
@@ -61,28 +81,29 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 20),
 
-                const Text(
-                  'Nombre Apellido',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
+                Text(
+                  '${user?.name ?? ''} ${user?.lastname ?? ''}',
+
+                  style: const TextStyle(fontSize: 18, color: Colors.black),
                 ),
                 const SizedBox(height: 8),
-                const Text( //funcionalidad para biografia de la bbdd
-                  'lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel sapien eget nunc efficitur varius.',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black87,
-                    height: 1.5,
-                  ),
+                Text(
+                  user?.email ?? '',
+
+                  style: const TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+
+                const SizedBox(height: 8),
+
+                Text(
+                  user?.phone ?? '',
+
+                  style: const TextStyle(fontSize: 14, color: Colors.black54),
                 ),
 
                 const SizedBox(height: 20),
-
               ],
             ),
           ),
@@ -95,13 +116,11 @@ class ProfileScreen extends StatelessWidget {
               color: Colors.black12,
               borderRadius: BorderRadius.circular(15),
             ),
-            
           ),
         ],
       ),
     );
   }
-
 
   Widget _buildStatItem(String value, String label) {
     return Column(
@@ -109,17 +128,11 @@ class ProfileScreen extends StatelessWidget {
       children: [
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 13,
-            color: Colors.black54,
-          ),
+          style: const TextStyle(fontSize: 13, color: Colors.black54),
         ),
       ],
     );

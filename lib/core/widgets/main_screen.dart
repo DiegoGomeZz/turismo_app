@@ -4,7 +4,7 @@ import 'package:turismo_app/features/home/controllers/home_controller.dart';
 
 import 'package:turismo_app/features/home/views/home_screen.dart';
 import 'package:turismo_app/features/map/views/map_screen.dart';
-import 'package:turismo_app/features/profile/views/profile_screen.dart';
+import 'package:turismo_app/features/profile/views/profile_gate_screen.dart';
 import 'package:turismo_app/features/provisorio/views/provisorio_screen.dart';
 import 'package:turismo_app/features/search/views/search_screen.dart';
 
@@ -55,7 +55,7 @@ class _MainScreenState extends State<MainScreen> {
           _buildTabNavigator(1, const SearchScreen()),
           _buildTabNavigator(2, const MapScreen()),
           _buildTabNavigator(3, const ProvisorioScreen()),
-          _buildTabNavigator(4, const ProfileScreen()),
+          _buildTabNavigator(4, const ProfileGate()),
         ],
       ),
 
