@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:turismo_app/features/home/models/attraction_model.dart';
-import 'package:turismo_app/features/home/controllers/attraction_detail_controller.dart';
+import 'package:turismo_app/features/home/providers/attraction_detail_provider.dart';
+import 'package:turismo_app/features/home/views/widgets/create_event_button.dart';
 
 class AttractionDetailScreen extends StatefulWidget {
   final AttractionModel attraction;
@@ -13,12 +14,12 @@ class AttractionDetailScreen extends StatefulWidget {
 }
 
 class _AttractionDetailScreenState extends State<AttractionDetailScreen> {
-  late AttractionDetailController _controller;
+  late AttractionDetailProvider _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AttractionDetailController();
+    _controller = AttractionDetailProvider();
   }
 
   @override
@@ -31,13 +32,10 @@ class _AttractionDetailScreenState extends State<AttractionDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // Usamos AnimatedBuilder para reconstruir solo cuando el controlador avise, 
-      //el animated builder hace lo siguiente: se suscribe a los cambios del controlador 
-      //y solo reconstruye la parte de la UI que depende de esos cambios, evitando reconstrucciones innecesarias de toda la pantalla.
-      body: AnimatedBuilder(
+      body: AnimatedBuilder( //AnimatedBuilder escucha los cambios en el controlador y reconstruye la UI
         animation: _controller,
         builder: (context, child) {
-          return CustomScrollView( //CustomScrollView para tener un SliverAppBar con efecto de colapso y scroll suave
+          return CustomScrollView(
             slivers: [
               _buildSliverAppBar(),
               SliverToBoxAdapter(
@@ -62,98 +60,76 @@ class _AttractionDetailScreenState extends State<AttractionDetailScreen> {
           );
         },
       ),
+
+    floatingActionButton: const CreateEventButton(),
+
     );
   }
 
   Widget _buildSliverAppBar() {
+
+    final List<String> imagenesAMostrar = widget.attraction.todasLasImagenes;
+
     return SliverAppBar(
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      surfaceTintColor: Colors.transparent, 
+      scrolledUnderElevation: 0,
       expandedHeight: 300.0,
       pinned: true,
       iconTheme: const IconThemeData(color: Colors.white),
       actions: [
-        IconButton(
-          icon: const Icon(Icons.favorite_border),
-          onPressed: () { /* Lógica de favoritos */ },
-        ),
-        IconButton(
-          icon: const Icon(Icons.share),
-          onPressed: () { /* Lógica de compartir */ },
-        ),
+        IconButton(icon: const Icon(Icons.favorite_border), onPressed: () {}),
+        IconButton(icon: const Icon(Icons.share), onPressed: () {}),
       ],
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
           fit: StackFit.expand,
           children: [
-            //imágenes
             PageView.builder(
               controller: _controller.pageController,
               onPageChanged: _controller.onImagePageChanged,
-              itemCount: widget.attraction.imageUrls.length,
+              itemCount: imagenesAMostrar.length,
               itemBuilder: (context, index) {
                 return CachedNetworkImage(
-                  imageUrl: widget.attraction.imageUrls[index],
+                  imageUrl: imagenesAMostrar[index],
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Container(color: Colors.grey[300]),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 );
               },
             ),
-            // Sombreado superior para que se vean los iconos
-            Positioned(
-              top: 0, left: 0, right: 0,
-              child: Container(
-                height: 100,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.black54, Colors.transparent],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
+            // Controles de imagen (Flechas y contador) solo si hay más de 1 imagen
+            if (imagenesAMostrar.length > 1)
+              Positioned(
+                bottom: 16, left: 16, right: 16,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.black45,
+                      child: IconButton(
+                        icon: const Icon(Icons.chevron_left, color: Colors.white),
+                        onPressed: _controller.previousImage,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(color: Colors.black87, borderRadius: BorderRadius.circular(20)),
+                      child: Text(
+                        '${_controller.currentImageIndex + 1} / ${imagenesAMostrar.length}',
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    CircleAvatar(
+                      backgroundColor: Colors.black45,
+                      child: IconButton(
+                        icon: const Icon(Icons.chevron_right, color: Colors.white),
+                        onPressed: () => _controller.nextImage(imagenesAMostrar.length),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            // Controles de imagen (Flechas y contador)
-            Positioned(
-              bottom: 16,
-              left: 16,
-              right: 16,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.black45,
-                    child: IconButton(
-                      icon: const Icon(Icons.chevron_left, color: Colors.white),
-                      onPressed: _controller.previousImage,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.black87,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.image, color: Colors.white, size: 16),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${_controller.currentImageIndex + 1} / ${widget.attraction.imageUrls.length}',
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                  CircleAvatar(
-                    backgroundColor: Colors.black45,
-                    child: IconButton(
-                      icon: const Icon(Icons.chevron_right, color: Colors.white),
-                      onPressed: () => _controller.nextImage(widget.attraction.imageUrls.length),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
@@ -179,7 +155,7 @@ class _AttractionDetailScreenState extends State<AttractionDetailScreen> {
             const Icon(Icons.star, color: Color.fromARGB(255, 255, 230, 0), size: 20),
             const SizedBox(width: 8),
             Text(
-              '(${widget.attraction.cantidadVotos} reviews)',
+              '(${widget.attraction.cantidadVotos} reviews en nuestra App)',
               style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
             ),
           ],
@@ -197,19 +173,6 @@ class _AttractionDetailScreenState extends State<AttractionDetailScreen> {
             ),
           ],
         ),
-        if (widget.attraction.fechaEvento != null) ...[
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              const Icon(Icons.calendar_today_outlined, color: Colors.grey, size: 20),
-              const SizedBox(width: 4),
-              Text(
-                '${widget.attraction.fechaEvento!.day}/${widget.attraction.fechaEvento!.month}/${widget.attraction.fechaEvento!.year}',
-                style: const TextStyle(color: Colors.grey, fontSize: 14),
-              ),
-            ],
-          ),
-        ]
       ],
     );
   }
@@ -218,31 +181,14 @@ class _AttractionDetailScreenState extends State<AttractionDetailScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AnimatedCrossFade(
-          duration: const Duration(milliseconds: 300),
-          crossFadeState: _controller.isDescriptionExpanded
-              ? CrossFadeState.showSecond
-              : CrossFadeState.showFirst,
-          firstChild: Text(
-            widget.attraction.descripcion,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.4),
-          ),
-          secondChild: Text(
-            widget.attraction.descripcion,
-            style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.4),
-          ),
+        const Text(
+          'Sobre este destino',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        InkWell(
-          onTap: _controller.toggleDescription,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 4.0, right: 4.0),
-            child: Text(
-              _controller.isDescriptionExpanded ? 'Leer menos' : '...Leer más',
-              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
-          ),
+        const SizedBox(height: 8),
+        Text(
+          'Ubicado en ${widget.attraction.direccion}, este es uno de los destinos más populares recomendados por nuestra comunidad.',
+          style: const TextStyle(fontSize: 15, color: Colors.black87, height: 1.4),
         ),
       ],
     );

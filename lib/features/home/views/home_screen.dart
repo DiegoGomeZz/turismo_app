@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:turismo_app/features/home/models/attraction_model.dart';
-
-import '../controllers/home_controller.dart';
+import 'package:turismo_app/features/home/views/widgets/create_event_button.dart';
+import '../providers/home_provider.dart';
 import 'widgets/category_card.dart';
- import 'widgets/attraction_card.dart'; // Descomentar cuando lo uses
+import 'package:turismo_app/features/home/views/widgets/vertical_attraction_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Nos suscribimos al controlador
-    final homeController = context.watch<HomeController>();
+    final homeProvider = context.watch<HomeProvider>();
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -61,7 +58,7 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20.0), 
         children: [
           const Text(
-            'Destinos populares',
+            'Eventos populares',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -71,34 +68,32 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 12),
           
           SizedBox(
-            height: 180, 
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 10,
-              itemExtent: 165.0,
-              itemBuilder: (context, index) {
-                return RepaintBoundary(
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey.shade300,
-                    highlightColor: Colors.grey.shade100,
-                    child: Container(
-                      width: 150,
-                      margin: const EdgeInsets.only(right: 15.0), 
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Center(child: Text('Destino $index')),
-                    ),
-                  ),
+            height: 260,
+            child: Builder(
+              builder: (context) {
+                final destinos = homeProvider.destinosPopulares; 
+                
+                if (destinos.isEmpty) {
+                  return const Center(child: CircularProgressIndicator()); 
+                }
+
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: destinos.length,
+                  itemBuilder: (context, index) {
+                    final destino = destinos[index];
+                    return RepaintBoundary(
+                      child: VerticalAttractionCard(attractionModel: destino),
+                    );
+                  },
                 );
-              },
+              }
             ),
           ),
 
           const SizedBox(height: 12),
           const Text(
-            'Categorias',
+            'Categorías',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -107,52 +102,16 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // Pintamos los datos directamente sin preguntar si está cargando
-          ...homeController.categorias.map((cat) => RepaintBoundary(
+          ...homeProvider.categorias.map((cat) => RepaintBoundary(
             child: CategoryCard(categoriaModel: cat)
           )).toList(),
-
-          const SizedBox(height: 12),
-
           
-          RepaintBoundary(
-            child: AttractionCard(
-              attractionModel: AttractionModel(
-                id: '1',
-                titulo: 'museo de arqueología de alta montaña',
-                descripcion: 'hola hola este es el museo de arqueología de alta montaña, un lugar fascinante que alberga las momias mejor conservadas del mundo. Ubicado en la ciudad de Salta, Argentina, este museo ofrece a los visitantes una experiencia única para conocer la historia y cultura de las civilizaciones precolombinas que habitaron la región andina.',
-                promedioEstrellas: 3,
-                cantidadVotos: 1200,
-                direccion: 'Calle Falsa 123',
-                imageUrls: [
-                  'https://media-cdn.tripadvisor.com/media/photo-s/1b/4a/c2/c0/maam-museo-de-arqueologia.jpg',
-                  'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/04/c7/ce/65/museo-pajcha-arte-etnico.jpg?w=600&h=600&s=1',
-                  'https://thebigtraveltheory.fr/wp-content/uploads/2018/09/MAAM-1.jpg',
-                ],
-                estadisticasVotos: RatingStats(estrellas5: 1000, estrellas4: 150, estrellas3: 30, estrellas2: 15, estrellas1: 5),
-                comentarios: [
-                  ReviewModel(
-                    id: '1',
-                    nombreUsuario: 'Yamil Homero',
-                    avatarUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
-                    puntuacion: 5.0,    
-                    comentario: '¡Increíble experiencia! Las momias están muy bien conservadas y el museo es muy educativo.',
-                    fecha: DateTime.now().subtract(const Duration(days: 2)),
-                  ),
-                  ReviewModel(
-                    id: '2',
-                    nombreUsuario: 'Cami Cisnero',
-                    avatarUrl: 'https://randomuser.me/api/portraits/women/2.jpg',
-                    puntuacion: 4.5,
-                    comentario: 'Muy interesante, aunque me hubiera gustado que hubiera más información en inglés.',
-                    fecha: DateTime.now().subtract(const Duration(days: 1)),
-                  ),
-                ],
-              )
-            ),
-          ),
         ],
       ),
+
+      floatingActionButton: const CreateEventButton(),
+
     );
   }
 }
+
