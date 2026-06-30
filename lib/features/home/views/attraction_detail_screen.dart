@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:turismo_app/features/home/models/attraction_model.dart';
 import 'package:turismo_app/features/home/controllers/attraction_detail_controller.dart';
+import 'package:turismo_app/features/home/views/widgets/create_event_button.dart';
 
 class AttractionDetailScreen extends StatefulWidget {
   final AttractionModel attraction;
@@ -62,11 +63,17 @@ class _AttractionDetailScreenState extends State<AttractionDetailScreen> {
           );
         },
       ),
+
+    floatingActionButton: const CreateEventButton(),
+
     );
   }
 
   Widget _buildSliverAppBar() {
     return SliverAppBar(
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      surfaceTintColor: Colors.transparent, 
+      scrolledUnderElevation: 0,
       expandedHeight: 300.0,
       pinned: true,
       iconTheme: const IconThemeData(color: Colors.white),

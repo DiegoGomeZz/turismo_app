@@ -1,0 +1,110 @@
+{
+  "variant": "light",
+  "styles": [
+    {
+      "id": "pointOfInterest.emergency",
+      "geometry": {
+        "visible": false
+      },
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.entertainment.casino",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.entertainment.cinema",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.landmark",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.other.bridge",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.other.military",
+      "geometry": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.other.school",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.recreation.zoo",
+      "geometry": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.retail",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.service.atm",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.service.bank",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.service.evCharging",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.service.gasStation",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.service.parkingLot",
+      "geometry": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.service.postOffice",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.service.restroom",
+      "label": {
+        "visible": false
+      }
+    },
+    {
+      "id": "pointOfInterest.service.restStop",
+      "label": {
+        "visible": false
+      }
+    }
+  ]
+}

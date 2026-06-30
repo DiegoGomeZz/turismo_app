@@ -1,19 +1,38 @@
-import 'package:flutter/material.dart';
-import 'package:turismo_app/features/home/models/category_model.dart';
-import 'package:turismo_app/features/home/models/attraction_model.dart'; // Asegúrate de que esta ruta sea correcta
+import 'package:turismo_app/features/home/models/attraction_model.dart';
 
-class HomeController extends ChangeNotifier {
+class CategoryDetailController {
 
-  final List<CategoryModel> _categorias = const [
-    CategoryModel(id: 1, nombre: 'Gastronomía', imagen: 'assets/images/gastronomia.webp'),
-    CategoryModel(id: 2, nombre: 'Cerros', imagen: 'assets/images/cerros.webp'),
-    CategoryModel(id: 3, nombre: 'Museos', imagen: 'assets/images/museos.webp'),
-    CategoryModel(id: 4, nombre: 'Escalada', imagen: 'assets/images/escalada.webp'),
-  ];
+  // Toma el ID o nombre de la categoría para saber qué buscar.
+Future<List<AttractionModel>> getAttractionsByCategory(String categoryId, {int page = 1, int limit = 10}) async {
+    try {
+      // 1. Obtener atracciones creadas por usuarios (tu base de datos)
+      final userAttractions = await _fetchUserCreatedAttractions(categoryId);
 
-  // Datos simulados (Mock data) para probar la interfaz
-  final List<AttractionModel> _destinosPopulares = [
-    AttractionModel(
+      // 2. Obtener atracciones de la API de Google Places
+      final googleAttractions = await _fetchGoogleApiAttractions(categoryId);
+
+      // 3. Combinar ambas listas
+      final combinedList = [...userAttractions, ...googleAttractions];
+
+      // Opcional: Podrías ordenar la lista aquí (por ejemplo, por mejor rating)
+      combinedList.sort((a, b) => b.promedioEstrellas.compareTo(a.promedioEstrellas));
+
+      return combinedList;
+      
+    } catch (e) {
+      // Manejo de errores (puedes registrar el error en un logger)
+      throw Exception('Error al obtener atracciones: $e');
+    }
+  }
+
+
+  Future<List<AttractionModel>> _fetchUserCreatedAttractions(String categoryId) async {
+    // Aquí iría tu lógica real, por ejemplo, una consulta a Firebase Firestore:
+    // final snapshot = await FirebaseFirestore.instance.collection('attractions').where('categoryId', isEqualTo: categoryId).get();
+    // return snapshot.docs.map((doc) => AttractionModel.fromMap(doc.data())).toList();
+    
+    return [
+      AttractionModel(
         id: '1',
         titulo: 'museo de arqueología de alta montaña',
         descripcion: 'hola hola este es el museo de arqueología de alta montaña, un lugar fascinante que alberga las momias mejor conservadas del mundo. Ubicado en la ciudad de Salta, Argentina, este museo ofrece a los visitantes una experiencia única para conocer la historia y cultura de las civilizaciones precolombinas que habitaron la región andina.',
@@ -197,10 +216,15 @@ class HomeController extends ChangeNotifier {
           ),
         ],
       ),
-  ];
+    ];
+  }
 
-  List<CategoryModel> get categorias => _categorias;
-  
-  // Getter para que el HomeScreen pueda acceder a la lista
-  List<AttractionModel> get destinosPopulares => _destinosPopulares;
+  Future<List<AttractionModel>> _fetchGoogleApiAttractions(String categoryId) async {
+    // Aquí iría tu lógica real haciendo una petición HTTP a la API de Google Places.
+    // Tendrás que mapear el JSON que te devuelva Google a tu AttractionModel.
+    
+    return [
+      
+    ];
+  }
 }

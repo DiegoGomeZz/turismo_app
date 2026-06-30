@@ -10,6 +10,8 @@ class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mapVM = Provider.of<MapViewModel>(context);
+    // Guarda una referencia al controlador del mapa
+    GoogleMapController? _mapController;
 
     return Scaffold(
       body: Stack(
@@ -17,11 +19,20 @@ class MapScreen extends StatelessWidget {
           // 1. El Mapa de Google
           GoogleMap(
             initialCameraPosition: const CameraPosition(
-              target: LatLng(-34.6037, -58.3816), // Coordenadas por defecto (ej. BsAs)
-              zoom: 12,
+              target: LatLng(-24.7821, -65.4232), // Coordenadas referenciales locales
+              zoom: 14,
             ),
             markers: mapVM.markers,
-            myLocationButtonEnabled: false,
+            myLocationEnabled: true,
+            zoomControlsEnabled: false,
+            compassEnabled: true,
+            
+            onMapCreated: (GoogleMapController controller) async {
+              _mapController = controller;
+              // Carga el archivo JSON desde tus assets
+              String style = await DefaultAssetBundle.of(context).loadString('assets/map_style.json');
+              _mapController?.setMapStyle(style);
+            },
           ),
 
           // 2. Barra de Búsqueda Superior
@@ -37,7 +48,7 @@ class MapScreen extends StatelessWidget {
                 child: TextField(
                   onChanged: (value) => mapVM.updateSearchQuery(value),
                   decoration: const InputDecoration(
-                    hintText: 'Buscar lugares turísticos...',
+                    hintText: 'Buscar ...',
                     border: InputBorder.none,
                     icon: Icon(Icons.search, color: Colors.grey),
                   ),

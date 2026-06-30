@@ -41,4 +41,9 @@ class MapViewModel extends ChangeNotifier {
     _places.add(newPlace);
     notifyListeners(); // Esto avisa a Provider que redibuje las vistas
   }
+
+  void removePlace(String placeId) {
+  _places.removeWhere((place) => place.id == placeId);
+  notifyListeners(); // 🔄 Actualiza el mapa automáticamente
+}
 }

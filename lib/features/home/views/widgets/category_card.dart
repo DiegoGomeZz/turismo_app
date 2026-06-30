@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:turismo_app/features/home/models/category_model.dart';
+import 'package:turismo_app/features/home/views/category_detail_screen.dart';
 
 class CategoryCard extends StatelessWidget {
   final CategoryModel categoriaModel;
@@ -8,7 +9,16 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryDetailScreen(categoria: categoriaModel),
+          ),
+        );
+      },
+      child: Container(
       height: 200,
       margin: const EdgeInsets.only(bottom: 20.0),
       decoration: BoxDecoration(
@@ -47,6 +57,7 @@ class CategoryCard extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }
