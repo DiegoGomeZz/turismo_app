@@ -54,4 +54,33 @@ class ApiClient {
       'message': data['message'] ?? 'Error desconocido',
     };
   }
+
+  Future<Map<String, dynamic>> put(
+    String endpoint,
+    Map<String, dynamic> body, {
+    String? token,
+  }) async {
+    final uri = Uri.parse('$baseUrl$endpoint');
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    final response = await http.put(
+      uri,
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    print('========== PUT ==========');
+    print(uri);
+    print(headers);
+    print(body);
+
+    print(response.statusCode);
+    print(response.body);
+
+    return _handleResponse(response);
+  }
 }

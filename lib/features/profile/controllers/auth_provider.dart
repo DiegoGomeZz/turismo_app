@@ -5,70 +5,48 @@ import '../services/api_client.dart';
 import '../services/auth_service.dart';
 
 class AuthProvider extends ChangeNotifier {
-
   late final AuthService _authService;
 
-  AuthState _authState =
-      AuthState.loading;
+  AuthState _authState = AuthState.loading;
 
   UserModel? _user;
 
   String? _token;
 
-  AuthState get authState =>
-      _authState;
+  AuthState get authState => _authState;
 
   UserModel? get user => _user;
 
-  bool get isLoggedIn =>
-      _authState ==
-      AuthState.authenticated;
+  bool get isLoggedIn => _authState == AuthState.authenticated;
 
   AuthProvider() {
-
     final apiClient = ApiClient(
       baseUrl: 'https://p01--turismo-app-back--rzjxhlb42yvn.code.run',
     );
 
-    _authService = AuthService(
-      apiClient,
-    );
+    _authService = AuthService(apiClient);
 
     checkLoginStatus();
   }
 
   Future<void> checkLoginStatus() async {
-    await Future.delayed(
-      const Duration(seconds: 1),
-    );
-    _authState =
-        AuthState.unauthenticated;
+    await Future.delayed(const Duration(seconds: 1));
+    _authState = AuthState.unauthenticated;
     notifyListeners();
   }
 
-  Future<bool> login(
-    String email,
-    String password,
-  ) async {
+  Future<bool> login(String email, String password) async {
     try {
-      _authState =
-          AuthState.loading;
+      _authState = AuthState.loading;
       notifyListeners();
-      final response =
-          await _authService.login(
-        email,
-        password,
-      );
+      final response = await _authService.login(email, password);
       _user = response.user;
       _token = response.token;
-      _authState =
-          AuthState.authenticated;
+      _authState = AuthState.authenticated;
       return true;
-
     } catch (e) {
       debugPrint(e.toString());
-      _authState =
-          AuthState.unauthenticated;
+      _authState = AuthState.unauthenticated;
       return false;
     } finally {
       notifyListeners();
@@ -82,15 +60,12 @@ class AuthProvider extends ChangeNotifier {
     required String phone,
     required String password,
   }) async {
-
     try {
-      _authState =
-          AuthState.loading;
+      _authState = AuthState.loading;
 
       notifyListeners();
 
-      final response =
-          await _authService.register(
+      final response = await _authService.register(
         name: name,
         lastname: lastname,
         email: email,
@@ -100,15 +75,41 @@ class AuthProvider extends ChangeNotifier {
 
       _user = response.user;
       _token = response.token;
-      _authState =
-          AuthState.authenticated;
+      _authState = AuthState.authenticated;
       return true;
-
     } catch (e) {
       debugPrint(e.toString());
-      _authState =
-          AuthState.unauthenticated;
+      _authState = AuthState.unauthenticated;
       return false;
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateUser({
+    String? name,
+    String? lastname,
+    String? phone,
+  }) async {
+    if (_user == null) {
+      throw Exception('Usuario no autenticado');
+    }
+    try {
+      _authState = AuthState.loading;
+      notifyListeners();
+      final updatedUser = await _authService.updateUser(
+        id: _user!.id,
+        token: _token!,
+        name: name,
+        lastname: lastname,
+        phone: phone,
+      );
+
+      _user = updatedUser;
+      _authState = AuthState.authenticated;
+    } catch (e) {
+      _authState = AuthState.authenticated;
+      rethrow;
     } finally {
       notifyListeners();
     }
