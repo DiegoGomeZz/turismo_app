@@ -1,127 +1,175 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatelessWidget {   
+import 'package:turismo_app/features/profile/controllers/auth_provider.dart';
+import 'package:turismo_app/features/profile/views/edit_profile_screen.dart';
+
+class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
+
+    final user = authProvider.user;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'nombre_usuario',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        title: Text(
+          '${user?.name ?? ''} ${user?.lastname ?? ''}',
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
         actions: [
-          IconButton(
+          PopupMenuButton<String>(
             icon: const Icon(Icons.settings_outlined, color: Colors.black),
-            onPressed: () {}, //agregar funcionamiento!!!!!!!!
+            color: Colors.white,
+
+            onSelected: (value) {
+              switch (value) {
+                case 'edit':
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const EditProfileScreen(),
+                    ),
+                  );
+                  break;
+
+                case 'logout':
+                  authProvider.logout();
+                  Navigator.popUntil(context, (route) => route.isFirst);
+                  break;
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'edit',
+
+                child: Row(
+                  children: [
+                    Icon(Icons.edit_outlined),
+
+                    SizedBox(width: 10),
+
+                    Text('Editar perfil'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'logout',
+                child: Row(
+                  children: [
+                    Icon(Icons.logout),
+                    SizedBox(width: 10),
+                    Text('Cerrar sesión'),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: const EdgeInsets.all(20),
         children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color.fromARGB(40, 0, 0, 0),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Color.fromARGB(255, 220, 220, 220),
-                      child: Icon(Icons.person, size: 40, color: Colors.white),
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _buildStatItem('0', 'Destinos'),
-                          _buildStatItem('0', 'Seguidores'),
-                          _buildStatItem('0', 'Seguidos'),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+          _buildProfileCard(user),
+          const SizedBox(height: 30),
+          _buildPlaceholderSection(),
+        ],
+      ),
+    );
+  }
 
-                const SizedBox(height: 20),
+  Widget _buildProfileCard(dynamic user) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: const Color.fromARGB(20, 0, 0, 0),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
 
-                const Text(
-                  'Nombre Apellido',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text( //funcionalidad para biografia de la bbdd
-                  'lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel sapien eget nunc efficitur varius.',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black87,
-                    height: 1.5,
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-              ],
-            ),
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 50,
+            backgroundColor: const Color.fromARGB(255, 220, 220, 220),
+            backgroundImage: user?.image != null
+                ? NetworkImage(user!.image!)
+                : null,
+            child: user?.image == null
+                ? const Icon(Icons.person, size: 50, color: Colors.white)
+                : null,
           ),
 
-          const SizedBox(height: 50),
+          const SizedBox(height: 24),
+          Text(
+            '${user?.name ?? ''} ${user?.lastname ?? ''}',
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
 
-          Container(
-            height: 200,
-            decoration: BoxDecoration(
-              color: Colors.black12,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            
+          const SizedBox(height: 8),
+
+          Text(
+            user?.email ?? '',
+            style: const TextStyle(fontSize: 15, color: Colors.black54),
+          ),
+
+          const SizedBox(height: 8),
+          Text(
+            user?.phone ?? '',
+            style: const TextStyle(fontSize: 15, color: Colors.black54),
           ),
         ],
       ),
     );
   }
 
+  Widget _buildPlaceholderSection() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.black12,
+        borderRadius: BorderRadius.circular(20),
+      ),
 
-  Widget _buildStatItem(String value, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+      child: const Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.favorite_border, size: 42, color: Colors.black54),
+          SizedBox(height: 16),
+          Text(
+            'Próximamente vas a poder guardar tus atracciones favoritas.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
+            ),
           ),
-        ),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 13,
-            color: Colors.black54,
+          SizedBox(height: 8),
+          Text(
+            'Armá tu propia colección de lugares para visitar más tarde.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14, color: Colors.black54, height: 1.5),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
