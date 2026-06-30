@@ -6,21 +6,93 @@ class ProvisorioScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+
       appBar: AppBar(
-        scrolledUnderElevation: 0, //para q no cambie el color del appbar cuando scrolleo
+        scrolledUnderElevation: 0,
         toolbarHeight: 130,
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: Colors.white,
+        elevation: 0,
         title: const Text(
-          'Provisorio',
+          'Calendario de Eventos',
           style: TextStyle(
-              color: Color.fromARGB(255, 17, 17, 17),
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Roboto',
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
-        )
-      )
+        ),
+      ),
+
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Container(
+            padding: const EdgeInsets.all(28),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color.fromARGB(30, 0, 0, 0),
+                  blurRadius: 20,
+                  offset: Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.lock_outline, size: 60, color: Colors.black),
+
+                const SizedBox(height: 20),
+
+                const Text(
+                  'Funcionalidad Premium',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+
+                const SizedBox(height: 12),
+
+                const Text(
+                  'En esta sección podrás crear un itinerario de los eventos a los que quieras asistir, pero para eso necesitas una versión premium.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                    height: 1.4,
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Próximamente: planes premium'),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text('Pasate a premium'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

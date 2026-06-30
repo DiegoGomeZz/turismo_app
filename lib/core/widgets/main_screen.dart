@@ -52,10 +52,9 @@ class _MainScreenState extends State<MainScreen> {
               child: const HomeScreen(),             // Se lo pasamos a la Vista
             ),
           ),
-          _buildTabNavigator(1, const SearchScreen()),
-          _buildTabNavigator(2, const MapScreen()),
-          _buildTabNavigator(3, const ProvisorioScreen()),
-          _buildTabNavigator(4, const ProfileGate()),
+          _buildTabNavigator(1, const MapScreen()),
+          _buildTabNavigator(2, const ProvisorioScreen()),
+          _buildTabNavigator(3, const ProfileGate()),
         ],
       ),
 
@@ -79,11 +78,6 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.home_outlined, color: Colors.black54),
             selectedIcon: Icon(Icons.home, color: Colors.black),
             label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.search, color: Colors.black54),
-            selectedIcon: Icon(Icons.search, color: Colors.black),
-            label: 'Search',
           ),
           NavigationDestination(
             icon: Icon(Icons.location_on_outlined, color: Colors.black54),
