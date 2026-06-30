@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:turismo_app/core/widgets/main_screen.dart';
 import 'package:turismo_app/features/profile/providers/auth_provider.dart';
 import 'package:turismo_app/features/home/providers/attraction_detail_provider.dart';
 import 'package:turismo_app/features/map/providers/map_provider.dart';
+import 'package:turismo_app/features/home/views/splash_screen.dart';
 
 void main() {
   runApp(
@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainScreen(),
+      home: SplashScreen(),
     );
   }
 }
+

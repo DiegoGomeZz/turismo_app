@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
         title: Column(
           children: [
             const Text(
-              'Turismo App',
+              'TuriSalta',
               style: TextStyle(
                 color: Color.fromARGB(255, 17, 17, 17),
                 fontSize: 24,
